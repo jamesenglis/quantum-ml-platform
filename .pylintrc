@@ -1,0 +1,8 @@
+[MASTER]
+extension-pkg-allow-list=torch,pennylane,qiskit
+
+[MESSAGES CONTROL]
+disable=C0103,C0301,R0903,R0801
+
+[BASIC]
+good-names=i,j,k,ex,Run,_

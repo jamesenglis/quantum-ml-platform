@@ -1,0 +1,23 @@
+# Core numerical libraries
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Qiskit 1.0+ only (no legacy packages)
+qiskit>=1.0.0
+qiskit-aer>=0.12.0
+
+# ML and API
+scikit-learn>=1.3.0
+mlflow>=2.8.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+
+# Development
+pytest>=7.4.0
+black>=23.0.0
+pylint>=2.17.0
+pre-commit>=3.0.0
+jupyter>=1.0.0
