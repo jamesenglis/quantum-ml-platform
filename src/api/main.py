@@ -93,8 +93,8 @@ async def predict(request: PredictionRequest):
         inference_time = time.time() - start_time
         
         # Record metrics
-        metrics_collector.record_prediction(request.model_version or "latest", True)
-        metrics_collector.record_latency(inference_time)
+        # # metrics_collector.record_prediction(request.model_version or "latest", True)
+        # # metrics_collector.record_latency(inference_time)
         
         # Log prediction
         from src.monitoring.monitor import monitor
@@ -107,8 +107,8 @@ async def predict(request: PredictionRequest):
             inference_time=inference_time
         )
     except Exception as e:
-        metrics_collector.record_prediction(request.model_version or "latest", False)
-        metrics_collector.record_error(str(e))
+        # # metrics_collector.record_prediction(request.model_version or "latest", False)
+        # # metrics_collector.record_error(str(e))
         logger.error(f"Prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -128,8 +128,8 @@ async def predict(request: PredictionRequest):
         inference_time = time.time() - start_time
         
         # Record metrics
-        metrics_collector.record_prediction(request.model_version or "latest", True)
-        metrics_collector.record_latency(inference_time)
+        # # metrics_collector.record_prediction(request.model_version or "latest", True)
+        # # metrics_collector.record_latency(inference_time)
         
         # Log prediction
         from src.monitoring.monitor import monitor
@@ -142,7 +142,7 @@ async def predict(request: PredictionRequest):
             inference_time=inference_time
         )
     except Exception as e:
-        metrics_collector.record_prediction(request.model_version or "latest", False)
-        metrics_collector.record_error(str(e))
+        # # metrics_collector.record_prediction(request.model_version or "latest", False)
+        # # metrics_collector.record_error(str(e))
         logger.error(f"Prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
