@@ -1,12 +1,7 @@
-# Virtual environment
-venv/
-.env
-.venv
-
-# Python cache
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
+*.class
 *.so
 .Python
 build/
@@ -21,36 +16,14 @@ parts/
 sdist/
 var/
 wheels/
-pip-wheel-metadata/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
-
-# Jupyter Notebook
-.ipynb_checkpoints
+# Virtual environments
+venv/
+env/
+ENV/
 
 # IDE
 .vscode/
@@ -60,16 +33,13 @@ coverage.xml
 
 # OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
-# MLflow
+# ML/Data
+data/
+models/
+*.pkl
+*.joblib
+wandb/
 mlruns/
-mlflow.db
-
-# Quantum simulator cache
-.qiskit/
+.prefect/

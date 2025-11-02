@@ -1,0 +1,14 @@
+# MLOps Core Dependencies
+# These are OPTIONAL - the code works without them
+
+# Experiment Tracking
+mlflow>=2.8.0          # pip install mlflow
+
+# Visualization (optional - may require setup)
+wandb>=0.16.0          # pip install wandb
+
+# Workflow Orchestration (optional)
+prefect>=2.0.0         # pip install prefect
+
+# The QuantumMLOpsManager works without these dependencies
+# but provides enhanced functionality with them
