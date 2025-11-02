@@ -1,0 +1,36 @@
+FROM python:3.9-slim as builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y gcc g++
+
+# Copy and install dependencies
+COPY requirements-mlops.txt requirements-api.txt ./
+RUN pip install --user --no-cache-dir -r requirements-mlops.txt -r requirements-api.txt
+
+# Final stage
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Copy Python dependencies from builder
+COPY --from=builder /root/.local /root/.local
+
+# Make sure scripts in .local are usable
+ENV PATH=/root/.local/bin:$PATH
+
+# Copy application
+COPY src/ ./src/
+COPY run_api.py .
+
+# Create non-root user
+RUN useradd -m -u 1000 appuser && chown -R appuser /app
+USER appuser
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+CMD ["python", "run_api.py"]
