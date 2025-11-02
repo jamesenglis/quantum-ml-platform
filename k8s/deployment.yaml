@@ -13,15 +13,22 @@ spec:
     metadata:
       labels:
         app: quantum-ml-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/monitoring/metrics"
     spec:
       containers:
       - name: quantum-ml-api
         image: quantum-ml-platform:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         env:
         - name: ENVIRONMENT
           value: "production"
+        - name: MLFLOW_TRACKING_URI
+          value: "http://mlflow-service:5000"
         resources:
           requests:
             memory: "512Mi"

@@ -1,0 +1,42 @@
+replicaCount: 3
+
+image:
+  repository: quantum-ml-platform
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: quantum-ml.yourdomain.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: quantum-ml-tls
+  #    hosts:
+  #      - quantum-ml.yourdomain.com
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+env:
+  environment: production
+  log_level: INFO

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quantum-ml-config
+data:
+  environment: "production"
+  log-level: "INFO"
+  model-version: "v1.0.0"

@@ -1,0 +1,68 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-mlops.txt
+        pip install -r requirements-api.txt
+    
+    - name: Run tests
+      run: |
+        python -m pytest tests/ -v
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build Docker image
+      run: |
+        docker build -t quantum-ml-platform:latest .
+    
+    - name: Run container tests
+      run: |
+        docker run -d --name test-api -p 8000:8000 quantum-ml-platform:latest
+        sleep 10
+        curl -f http://localhost:8000/health
+    
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Push to Docker Hub
+      run: |
+        docker tag quantum-ml-platform:latest ${{ secrets.DOCKER_USERNAME }}/quantum-ml-platform:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/quantum-ml-platform:latest
+    
+    - name: Deploy to Kubernetes
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.K8S_HOST }}
+        username: ${{ secrets.K8S_USERNAME }}
+        key: ${{ secrets.K8S_SSH_KEY }}
+        script: |
+          kubectl set image deployment/quantum-ml-api quantum-ml-api=${{ secrets.DOCKER_USERNAME }}/quantum-ml-platform:latest
+          kubectl rollout status deployment/quantum-ml-api
