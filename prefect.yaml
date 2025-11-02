@@ -1,0 +1,18 @@
+# Prefect configuration file
+name: quantum-ml-platform
+
+deployments:
+  - name: training
+    entrypoint: "src/orchestration/flows.py:training_flow"
+    parameters: {}
+    work_pool:
+      name: default
+    schedules:
+      - interval: 3600
+        active: true
+
+  - name: serving
+    entrypoint: "src/orchestration/flows.py:serving_flow"
+    parameters: {}
+    work_pool:
+      name: default

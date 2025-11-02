@@ -12,3 +12,19 @@ prefect>=2.0.0         # pip install prefect
 
 # The QuantumMLOpsManager works without these dependencies
 # but provides enhanced functionality with them
+
+# Phase 2: FastAPI
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+
+# Phase 3: DVC
+dvc==3.0.0
+
+# Phase 4: Prefect
+prefect==2.10.0
+
+# Common
+pydantic==2.5.0
+loguru==0.7.2
+pyyaml==6.0.1
