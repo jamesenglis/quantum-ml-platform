@@ -76,3 +76,73 @@ async def list_models():
         "models": list(model_manager.models.keys()),
         "current_model": model_manager.current_model
     }
+
+# Add monitoring routes
+from src.monitoring.api import router as monitoring_router
+app.include_router(monitoring_router)
+
+# Update predict endpoint to include monitoring
+@app.post("/predict", response_model=PredictionResponse)
+async def predict(request: PredictionRequest):
+    """Make predictions using the quantum ML model"""
+    start_time = time.time()
+    
+    try:
+        # Demo prediction - replace with actual model inference
+        mock_prediction = [sum(request.features) / len(request.features)] if request.features else [0.0]
+        inference_time = time.time() - start_time
+        
+        # Record metrics
+        metrics_collector.record_prediction(request.model_version or "latest", True)
+        metrics_collector.record_latency(inference_time)
+        
+        # Log prediction
+        from src.monitoring.monitor import monitor
+        monitor.log_prediction(request.features, mock_prediction, request.model_version or "latest")
+        
+        return PredictionResponse(
+            prediction=mock_prediction,
+            confidence=0.95,
+            model_version=request.model_version or "latest",
+            inference_time=inference_time
+        )
+    except Exception as e:
+        metrics_collector.record_prediction(request.model_version or "latest", False)
+        metrics_collector.record_error(str(e))
+        logger.error(f"Prediction error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Add monitoring routes
+from src.monitoring.api import router as monitoring_router
+app.include_router(monitoring_router)
+
+# Update predict endpoint to include monitoring
+@app.post("/predict", response_model=PredictionResponse)
+async def predict(request: PredictionRequest):
+    """Make predictions using the quantum ML model"""
+    start_time = time.time()
+    
+    try:
+        # Demo prediction - replace with actual model inference
+        mock_prediction = [sum(request.features) / len(request.features)] if request.features else [0.0]
+        inference_time = time.time() - start_time
+        
+        # Record metrics
+        metrics_collector.record_prediction(request.model_version or "latest", True)
+        metrics_collector.record_latency(inference_time)
+        
+        # Log prediction
+        from src.monitoring.monitor import monitor
+        monitor.log_prediction(request.features, mock_prediction, request.model_version or "latest")
+        
+        return PredictionResponse(
+            prediction=mock_prediction,
+            confidence=0.95,
+            model_version=request.model_version or "latest",
+            inference_time=inference_time
+        )
+    except Exception as e:
+        metrics_collector.record_prediction(request.model_version or "latest", False)
+        metrics_collector.record_error(str(e))
+        logger.error(f"Prediction error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
